@@ -1,0 +1,13 @@
+fastapi==0.95.2
+uvicorn==0.23.2
+sqlalchemy==1.4.49
+databases==0.8.0
+alembic==1.12.1
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+pydantic==1.10.13         # ✅ Rust မလို version
+python-dotenv==1.0.0
+redis==4.5.5              # ✅ redis-py stable version
+celery==5.2.7
+httpx==0.25.0
