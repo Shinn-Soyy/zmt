@@ -5,14 +5,14 @@ from typing import Optional
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
+import os
+from dotenv import load_dotenv
 
-# Dummy DB substitute (you should use SQLAlchemy in real app)
-users_db = {}
+load_dotenv()
 
 app = FastAPI()
 
-# Allow frontend origin
-origins = ["http://127.0.0.1:5500", "http://localhost:5500"]  # change as needed
+origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -21,13 +21,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Security settings
-SECRET_KEY = "zmtsecretkey123"
+SECRET_KEY = os.getenv("SECRET_KEY", "zmtsecret")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Models
+users_db = {}
+
 class UserRegister(BaseModel):
     username: str
     email: EmailStr
@@ -51,7 +51,6 @@ class UserData(BaseModel):
     miningEndTime: Optional[int]
     boostLevel: int
 
-# Auth utils
 def verify_password(plain, hashed):
     return pwd_context.verify(plain, hashed)
 
@@ -70,7 +69,6 @@ def decode_token(token: str):
     except JWTError:
         return None
 
-# Routes
 @app.post("/auth/register")
 def register(user: UserRegister):
     if user.username in users_db:
