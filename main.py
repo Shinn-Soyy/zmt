@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 from typing import Optional
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -38,6 +38,8 @@ class UserLogin(BaseModel):
     password: str
 
 class UserData(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     username: str
     email: str
     balance: float
